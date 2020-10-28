@@ -776,7 +776,63 @@ GATEWAY 구현 (기존 8085 포트의 POINT 서비스를 GATEWAY(8080) 에서 �
 ![image](https://user-images.githubusercontent.com/68041026/97426680-28a9d500-1957-11eb-8578-74522d7a2234.png)
 ![image](https://user-images.githubusercontent.com/68041026/97426566-fb5d2700-1956-11eb-88d0-e878da096bd1.png)
 
-## 운영과 Retirement
+## 운영
+CB
+현재 시나리오에서는 리뷰 작성 후 재신청 시 자동으로 Request로 저장되는 로직이기에 Hystrix를 Review에 설정하고
+Sleep을 Request에 설정 한뒤 Reivew에 siege명령을 수행하여 부하를 발생함
+```
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 680
+ ```
+ Request에 Sleep을 통하여 임의 부하 처리
+ ```
+ @PostPersist
+    public void onPostPersist(){
+        Requested requested = new Requested();
+        BeanUtils.copyProperties(this, requested);
+        requested.publishAfterCommit();
+        try {
+            Thread.sleep((long) (400 + Math.random() * 300));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        takbaeyu.external.Payment payment = new takbaeyu.external.Payment();
+        // mappings goes here
+        payment.setRequestId(this.getId());
+        payment.setMemberId(this.getMemberId());
+        payment.setStatus("Paid");
+        RequestApplication.applicationContext.getBean(takbaeyu.external.PaymentService.class)
+            .dopay(payment);
+    }
+ ```
+ 
+siege -c1 -t10S -r5 -v --content-type "application/json" 'http://review:8080/reviews POST {"memberId": "10", "qty": 5, "review": "Good"}'
+![image](https://user-images.githubusercontent.com/68041026/97436604-9bba4800-1965-11eb-93a8-ee86ca9e0f4b.png)
+운영서비스는 죽지 않고 75%의 성공을 보여주고 있음
+
+AutoScailling
+
+위 Request 서비스의 가용성을 높이기 위해 HPA설정을 진행 한 뒤 부하를 주어서 Autoscail 가능여부를 확인한다
+```
+kubectl autoscale deployment request --cpu-percent=20 --min=1 --max=10
+```
+위 명령으로 HPA 설정을 한 뒤 siege 명령으로 부하 생성
+```
+siege -c10 -t120S -r5 -v --content-type "application/json" 'http://review:8080/reviews POST {"memberId": "10", "qty": 5, "review": "Good"}'
+```
+replica 10개로 늘어난 것 확인 및 siege 성공률 확인
+![image](https://user-images.githubusercontent.com/68041026/97442450-35392800-196d-11eb-93d3-5e321006cac8.png)
+![image](https://user-images.githubusercontent.com/68041026/97443683-adecb400-196e-11eb-8e24-c5d358d7099d.png)
+
+
+
+
 
 Request/Response 방식으로 구현하지 않았기 때문에 서비스가 더이상 불필요해져도 Deployment 에서 제거되면 기존 마이크로 서비스에 어떤 영향도 주지 않음.
 
