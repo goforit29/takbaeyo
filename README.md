@@ -632,14 +632,13 @@ kubectl apply -f kubernetes/deployment.yaml
 
 ## 구현  
 
-기존의 마이크로 서비스에 수정을 발생시키지 않도록 Inbund 요청을 REST 가 아닌 Event 를 Subscribe 하는 방식으로 구현. 기존 마이크로 서비스에 대하여 아키텍처나 기존 마이크로 서비스들의 데이터베이스 구조와 관계없이 추가됨
 
 Delivery 서비스 Finish 
 ![image](https://user-images.githubusercontent.com/68041026/97414874-dc0acd80-1947-11eb-9d2a-12a4cc337f1e.png)
 Delivery 서비스 내 데이터 입력 확인 완료
 ![image](https://user-images.githubusercontent.com/68041026/97414977-fe045000-1947-11eb-818c-d0534b2ee867.png)
 
-REQ RES 
+#REQ RES 
 
 review서비스 내 RequestService.java
 ```
@@ -724,7 +723,7 @@ Request 서비스 올리고 난 뒤 정상적입 입력
  Request 서비스에 자동등록(REQ/REQ 성공)
 ![image](https://user-images.githubusercontent.com/68041026/97418237-ed55d900-194b-11eb-973d-893cb5669997.png)
 
-PUB/SUB
+#PUB/SUB
 Review서비스 Review.java 
 ```
 @PostUpdate
@@ -768,16 +767,16 @@ Point서비스를 내린 이후 review등록
 Point 서비스 올린 이 후 포인트 신규 등록 확인
 ![image](https://user-images.githubusercontent.com/68041026/97428998-2301be80-195a-11eb-882c-1f3cfb98b32a.png)
 
-CQRS (기존 CQRS에서 신규 추가된 REVIEW의 REVIEW내용을 추가)
+#CQRS (기존 CQRS에서 신규 추가된 REVIEW의 REVIEW내용을 추가)
 ![image](https://user-images.githubusercontent.com/68041026/97425797-eb911300-1955-11eb-9d42-6ae5739ad341.png)
 
-GATEWAY 구현 (기존 8085 포트의 POINT 서비스를 GATEWAY(8080) 에서 조회)
+#GATEWAY 구현 (기존 8085 포트의 POINT 서비스를 GATEWAY(8080) 에서 조회)
 
 ![image](https://user-images.githubusercontent.com/68041026/97426680-28a9d500-1957-11eb-8578-74522d7a2234.png)
 ![image](https://user-images.githubusercontent.com/68041026/97426566-fb5d2700-1956-11eb-88d0-e878da096bd1.png)
 
 ## 운영
-CB
+#CB
 현재 시나리오에서는 리뷰 작성 후 재신청 시 자동으로 Request로 저장되는 로직이기에 Hystrix를 Review에 설정하고
 Sleep을 Request에 설정 한뒤 Reivew에 siege명령을 수행하여 부하를 발생함
 ```
@@ -816,7 +815,7 @@ siege -c1 -t10S -r5 -v --content-type "application/json" 'http://review:8080/rev
 ![image](https://user-images.githubusercontent.com/68041026/97436604-9bba4800-1965-11eb-93a8-ee86ca9e0f4b.png)
 운영서비스는 죽지 않고 75%의 성공을 보여주고 있음
 
-AutoScailling
+#AutoScailling
 
 위 Request 서비스의 가용성을 높이기 위해 HPA설정을 진행 한 뒤 부하를 주어서 Autoscail 가능여부를 확인한다
 ```
@@ -830,6 +829,15 @@ replica 10개로 늘어난 것 확인 및 siege 성공률 확인
 ![image](https://user-images.githubusercontent.com/68041026/97442450-35392800-196d-11eb-93d3-5e321006cac8.png)
 ![image](https://user-images.githubusercontent.com/68041026/97443683-adecb400-196e-11eb-8e24-c5d358d7099d.png)
 
+
+#무정지 재배포
+Autoscaler,Readness,CB제거한 버전 배포진행과 함께 Siege 사용
+
+![image](https://user-images.githubusercontent.com/68041026/97449376-f27b4e00-1974-11eb-8f93-59e923f49bc1.png)
+
+
+Readness설정 이후 배포 성공률
+![image](https://user-images.githubusercontent.com/68041026/97446397-b2669c00-1971-11eb-9227-663072e7297c.png)
 
 
 
