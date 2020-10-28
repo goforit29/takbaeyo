@@ -624,8 +624,7 @@ kubectl apply -f kubernetes/deployment.yaml
 # 추가서비스 
 
 ## 이벤트 스토밍 - Reivew 
-    ![image](https://user-images.githubusercontent.com/68041026/97397744-5417ca00-192d-11eb-923d-46ebac85481e.png)
-
+![image](https://user-images.githubusercontent.com/68041026/97397744-5417ca00-192d-11eb-923d-46ebac85481e.png)
 
 ## 헥사고날 아키텍처 변화 
 
