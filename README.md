@@ -835,9 +835,28 @@ Autoscaler,Readness,CB제거한 버전 배포진행과 함께 Siege 사용
 
 ![image](https://user-images.githubusercontent.com/68041026/97449376-f27b4e00-1974-11eb-8f93-59e923f49bc1.png)
 
-
 Readness설정 이후 배포 성공률
 ![image](https://user-images.githubusercontent.com/68041026/97446397-b2669c00-1971-11eb-9227-663072e7297c.png)
+
+#Configmap
+configmap 정의 yaml
+![image](https://user-images.githubusercontent.com/68041026/97450043-a381e880-1975-11eb-8a94-409e85973ac4.png)
+deploy시 해당 configmap 사용하도록 설정
+![image](https://user-images.githubusercontent.com/68041026/97450298-f0fe5580-1975-11eb-9310-244f7735f398.png)
+feignclient 사용 시 사용될 변수로 지정
+![image](https://user-images.githubusercontent.com/68041026/97450601-4175b300-1976-11eb-8d27-8fe6b2c168e8.png)
+![image](https://user-images.githubusercontent.com/68041026/97450464-1f7c3080-1976-11eb-9d6f-4deef0c3526c.png)
+REQ-RES 연결 포트(8080)8081 포트로 변경 후 Review 서비스 사용 시 오류 발생
+![image](https://user-images.githubusercontent.com/68041026/97451063-b8ab4700-1976-11eb-95d2-600dba18025b.png)
+
+
+#Liveness
+Liveness 설정을 기존HttpGet에서 TCPSocket 방식으로 변경 및 사용하지 않는 포트 8081을 사용하게 하여 Liveness 구동에 대한 확인진행
+![image](https://user-images.githubusercontent.com/68041026/97451471-1fc8fb80-1977-11eb-92d2-672691b59a18.png)
+Pod restart 수행
+![image](https://user-images.githubusercontent.com/68041026/97453034-b2b66580-1978-11eb-8e47-7a4780098bcd.png)
+Liveness 설정확인
+![image](https://user-images.githubusercontent.com/68041026/97453297-ef825c80-1978-11eb-8d28-005d089e9c5b.png)
 
 
 
