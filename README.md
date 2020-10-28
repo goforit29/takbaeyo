@@ -771,7 +771,12 @@ Point서비스를 내린 이후 review등록
 Point 서비스 올린 이 후 포인트 신규 등록 확인
 ![image](https://user-images.githubusercontent.com/68041026/97419795-d7e1ae80-194d-11eb-9220-b53675305c80.png)
 
+CQRS (기존 CQRS에서 신규 추가된 REVIEW의 REVIEW내용을 추가)
+![image](https://user-images.githubusercontent.com/68041026/97425797-eb911300-1955-11eb-9d42-6ae5739ad341.png)
 
+GATEWAY 구현 (기존 8085 포트의 POINT 서비스를 GATEWAY(8080) 에서 조회)
+![image](https://user-images.githubusercontent.com/68041026/97426566-fb5d2700-1956-11eb-88d0-e878da096bd1.png)
+![image](https://user-images.githubusercontent.com/68041026/97426680-28a9d500-1957-11eb-8578-74522d7a2234.png)
 
 ## 운영과 Retirement
 
