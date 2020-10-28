@@ -764,9 +764,9 @@ Point 서비스 내  PolicyHandler.java
 ```
 
 Point서비스를 내린 이후 review등록
-![image](https://user-images.githubusercontent.com/68041026/97419264-33f80300-194d-11eb-959d-0dd749ee2dd1.png)
+![image](https://user-images.githubusercontent.com/68041026/97428658-a66ee000-1959-11eb-8517-6fec70ce3d52.png)
 Point 서비스 올린 이 후 포인트 신규 등록 확인
-![image](https://user-images.githubusercontent.com/68041026/97419795-d7e1ae80-194d-11eb-9220-b53675305c80.png)
+![image](https://user-images.githubusercontent.com/68041026/97428998-2301be80-195a-11eb-882c-1f3cfb98b32a.png)
 
 CQRS (기존 CQRS에서 신규 추가된 REVIEW의 REVIEW내용을 추가)
 ![image](https://user-images.githubusercontent.com/68041026/97425797-eb911300-1955-11eb-9d42-6ae5739ad341.png)
