@@ -770,10 +770,9 @@ Point 서비스 올린 이 후 포인트 신규 등록 확인
 #CQRS (기존 CQRS에서 신규 추가된 REVIEW의 REVIEW내용을 추가)
 ![image](https://user-images.githubusercontent.com/68041026/97425797-eb911300-1955-11eb-9d42-6ae5739ad341.png)
 
-#GATEWAY 구현 (기존 8085 포트의 POINT 서비스를 GATEWAY(8080) 에서 조회)
+#GATEWAY 구현 (Gateway에서 Points 조회)
+![image](https://user-images.githubusercontent.com/68041026/97455808-949e3480-197b-11eb-87f6-1ba24be169de.png)
 
-![image](https://user-images.githubusercontent.com/68041026/97426680-28a9d500-1957-11eb-8578-74522d7a2234.png)
-![image](https://user-images.githubusercontent.com/68041026/97426566-fb5d2700-1956-11eb-88d0-e878da096bd1.png)
 
 ## 운영
 #CB
@@ -857,6 +856,9 @@ Pod restart 수행
 ![image](https://user-images.githubusercontent.com/68041026/97453034-b2b66580-1978-11eb-8e47-7a4780098bcd.png)
 Liveness 설정확인
 ![image](https://user-images.githubusercontent.com/68041026/97453297-ef825c80-1978-11eb-8d28-005d089e9c5b.png)
+8080설정 후 
+![image](https://user-images.githubusercontent.com/68041026/97456023-cc0ce100-197b-11eb-8b11-557b38a3061e.png)
+![image](https://user-images.githubusercontent.com/68041026/97456371-29089700-197c-11eb-83d5-fdda8be40f44.png)
 
 
 
