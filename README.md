@@ -632,7 +632,22 @@ kubectl apply -f kubernetes/deployment.yaml
 
 ## 구현  
 
-기존의 마이크로 서비스에 수정을 발생시키지 않도록 Inbund 요청을 REST 가 아닌 Event 를 Subscribe 하는 방식으로 구현. 기존 마이크로 서비스에 대하여 아키텍처나 기존 마이크로 서비스들의 데이터베이스 구조와 관계없이 추가됨. 
+기존의 마이크로 서비스에 수정을 발생시키지 않도록 Inbund 요청을 REST 가 아닌 Event 를 Subscribe 하는 방식으로 구현. 기존 마이크로 서비스에 대하여 아키텍처나 기존 마이크로 서비스들의 데이터베이스 구조와 관계없이 추가됨
+
+Delivery 서비스 Finish 
+![image](https://user-images.githubusercontent.com/68041026/97414874-dc0acd80-1947-11eb-9d2a-12a4cc337f1e.png)
+Delivery 서비스 업데이트 확인
+![image](https://user-images.githubusercontent.com/68041026/97414977-fe045000-1947-11eb-818c-d0534b2ee867.png)
+
+Review Req/res
+![image](https://user-images.githubusercontent.com/68041026/97416979-7bc95b00-194a-11eb-8fc0-c71a1f228c03.png)
+
+Request 서비스 올리고 난 뒤
+![image](https://user-images.githubusercontent.com/68041026/97417537-280b4180-194b-11eb-807f-402b2d0d594c.png)
+
+
+Review 서비스에 자동등록
+![image](https://user-images.githubusercontent.com/68041026/97414146-fd1eee80-1946-11eb-91ba-942858af2792.png)
 
 ## 운영과 Retirement
 
