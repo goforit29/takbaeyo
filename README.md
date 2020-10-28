@@ -639,15 +639,139 @@ Delivery 서비스 Finish
 Delivery 서비스 업데이트 확인
 ![image](https://user-images.githubusercontent.com/68041026/97414977-fe045000-1947-11eb-818c-d0534b2ee867.png)
 
-Review Req/res
+REQ RES 
+
+review서비스 내 RequestService.java
+'''
+package takbaeyu.external;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.Date;
+
+
+@FeignClient(name="request", url="${api.url.request}")
+
+public interface RequestService {
+
+    @RequestMapping(method= RequestMethod.POST, path="/requests")
+    public void request(@RequestBody Request request);
+
+}
+'''
+Review 서비스 내 review.java
+'''
+package takbaeyu;
+
+import javax.persistence.*;
+import org.springframework.beans.BeanUtils;
+import java.util.List;
+
+@Entity
+@Table(name="Review_table")
+public class Review {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+    private Long memberId;
+    private Long qty;
+    private String review;
+    private Long requestId;
+
+    @PostPersist
+    public void onPostPersist(){
+
+    }
+
+    @PostUpdate
+    public void onPostUpdate(){
+
+        Reviewed reviewed = new Reviewed();
+        BeanUtils.copyProperties(this, reviewed);
+        reviewed.publishAfterCommit();
+
+
+        Rerequested rerequested = new Rerequested();
+        BeanUtils.copyProperties(this, rerequested);
+        rerequested.publishAfterCommit();
+
+        //Following code causes dependency to external APIs
+        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+
+        if(this.getQty() != null && this.getQty() != 0 ) {
+            takbaeyu.external.Request request = new takbaeyu.external.Request();
+            request.setMemberId(this.getMemberId());
+            request.setQty(this.getQty());
+            request.setStatus("ReRequested");
+            // mappings goes here
+            ReviewApplication.applicationContext.getBean(takbaeyu.external.RequestService.class)
+                    .request(request);
+        }
+
+
+    }
+'''
 ![image](https://user-images.githubusercontent.com/68041026/97416979-7bc95b00-194a-11eb-8fc0-c71a1f228c03.png)
 
 Request 서비스 올리고 난 뒤
 ![image](https://user-images.githubusercontent.com/68041026/97417537-280b4180-194b-11eb-807f-402b2d0d594c.png)
 
+정상 입력  
+![image](https://user-images.githubusercontent.com/68041026/97418237-ed55d900-194b-11eb-973d-893cb5669997.png)
 
-Review 서비스에 자동등록
+Review 서비스에 자동등록(REQ/REQ 성공)
 ![image](https://user-images.githubusercontent.com/68041026/97414146-fd1eee80-1946-11eb-91ba-942858af2792.png)
+
+
+PUB/SUB
+Review서비스 Review.java 
+'''
+@PostUpdate
+    public void onPostUpdate(){
+
+        Reviewed reviewed = new Reviewed();
+        BeanUtils.copyProperties(this, reviewed);
+        reviewed.publishAfterCommit();
+'''
+Point 서비스 내  PolicyHandler.java
+
+'''
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverReviewed_GetPointPol(@Payload Reviewed reviewed){
+        if(reviewed.isMe()){       
+            int flag=0;
+            Iterator<Point> iterator = pointRepository.findAll().iterator();
+            while(iterator.hasNext()){
+                Point pointTmp = iterator.next();
+                if(pointTmp.getMemberId() == reviewed.getMemberId()){
+                    Optional<Point> PointOptional = pointRepository.findById(pointTmp.getId());
+                    Point point = PointOptional.get();
+                    point.setPoint(point.getPoint()+50);
+                    pointRepository.save(point);
+                    flag=1;
+                }
+            }
+            if (flag==0){
+                Point point = new Point();
+                point.setMemberId(reviewed.getMemberId());
+                point.setPoint((long)50);
+                pointRepository.save(point);
+            }
+            System.out.println("##### listener GetPointPol : " + reviewed.toJson());
+        }
+    }
+'''
+
+Point서비스를 내린 이후 review등록
+![image](https://user-images.githubusercontent.com/68041026/97419264-33f80300-194d-11eb-959d-0dd749ee2dd1.png)
+Point 서비스 올린 이 후 포인트 신규 등록 확인
+![image](https://user-images.githubusercontent.com/68041026/97419795-d7e1ae80-194d-11eb-9220-b53675305c80.png)
+
+
 
 ## 운영과 Retirement
 
