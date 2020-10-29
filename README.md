@@ -19,7 +19,7 @@
     - [오토스케일 아웃](#오토스케일-아웃)
     - [무정지 재배포](#무정지-재배포)
     - [Configmap](#Configmap)
-  - [신규 개발 조직의 추가](#신규-개발-조직의-추가)
+  - [추가서비스](# 추가서비스 )
 
 # 서비스 시나리오
 
@@ -627,8 +627,7 @@ kubectl apply -f kubernetes/deployment.yaml
 ![image](https://user-images.githubusercontent.com/68041026/97397744-5417ca00-192d-11eb-923d-46ebac85481e.png)
 
 ## 헥사고날 아키텍처 변화 
-
-![image](https://user-images.githubusercontent.com/487999/79685243-1d704100-8272-11ea-8ef6-f4869c509996.png)
+![image](https://user-images.githubusercontent.com/68041026/97516419-6ac62b80-19d6-11eb-8a74-ff6ea403254f.png)
 
 ## 구현  
 
@@ -880,6 +879,9 @@ Liveness 설정확인
 ![image](https://user-images.githubusercontent.com/68041026/97456023-cc0ce100-197b-11eb-8b11-557b38a3061e.png)
 ![image](https://user-images.githubusercontent.com/68041026/97456371-29089700-197c-11eb-83d5-fdda8be40f44.png)
 
+#폴리그랏
+신규Review 서비스는 H2가 아닌 Derby in-memory DB를 사용함
+![image](https://user-images.githubusercontent.com/68041026/97515725-05be0600-19d5-11eb-8ba0-4e60c83025ed.png)
 
 
 
